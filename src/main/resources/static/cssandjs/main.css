@@ -1,0 +1,22 @@
+.bg_green {
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(0,255,0,1) 50%, rgba(255,255,255,1) 100%);;
+    background-attachment: fixed;
+}
+
+.bg_red {
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,0,0,1) 50%, rgba(255,255,255,1) 100%);;
+    background-attachment: fixed;
+}
+
+div {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    -ms-transform: translateY(-35%);
+    transform: translateY(-35%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    text-align: center;
+}
