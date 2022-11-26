@@ -35,4 +35,12 @@ public class MaintenanceController {
         modelAndView.addObject("time", timeStamp);
         return modelAndView;
     }
+
+    @DeleteMapping("/uptime/reset")
+    String resetMessage(){
+
+        maintenanceService.resetMessage();
+
+        return "";
+    }
 }

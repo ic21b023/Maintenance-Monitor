@@ -33,4 +33,12 @@ public class MaintenanceServiceTest {
 
         assertEquals(localDateTime, maintenanceService.getLastUpdateTime());
     }
+
+    @Test
+    void resetMessage() {
+        maintenanceService.setMessage("Test");
+        maintenanceService.resetMessage();
+
+        assertEquals(maintenanceService.getMessage(),(""));
+    }
 }

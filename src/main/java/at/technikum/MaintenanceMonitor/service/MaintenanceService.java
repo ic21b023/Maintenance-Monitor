@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class MaintenanceService {
-    private Message messageModel = new Message("");
+    private static final String DEF_MESSAGE = "";
+
+    private Message messageModel = new Message(DEF_MESSAGE);
 
     public void setMessage(String message){
         messageModel.setMessage(message);
@@ -30,5 +32,10 @@ public class MaintenanceService {
 
     public LocalDateTime getLastUpdateTime() {
         return messageModel.getLastUpdateTime();
+    }
+
+    public void resetMessage(){
+        setMessage(DEF_MESSAGE);
+        setLastUpdateTime(LocalDateTime.now());
     }
 }
