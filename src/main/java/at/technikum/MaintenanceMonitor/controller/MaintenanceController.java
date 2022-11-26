@@ -3,8 +3,10 @@ package at.technikum.MaintenanceMonitor.controller;
 import at.technikum.MaintenanceMonitor.dto.Message;
 import at.technikum.MaintenanceMonitor.service.MaintenanceService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 public class MaintenanceController {
@@ -20,5 +22,17 @@ public class MaintenanceController {
         maintenanceService.setMessage(dto.getMessage());
         maintenanceService.setLastUpdateTime(LocalDateTime.now());
         return maintenanceService.getCopyOfCurrentlyStoredMessage();
+    }
+
+    @GetMapping("/uptime")
+    ModelAndView getMessage(ModelAndView modelAndView){
+        modelAndView.addObject("message", maintenanceService.getMessage());
+        modelAndView.addObject("condition", maintenanceService.getMessage().isEmpty());
+        modelAndView.setViewName("index");
+
+        String timeStamp = maintenanceService.getLastUpdateTime() == null ? "" : maintenanceService.getLastUpdateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        modelAndView.addObject("time", timeStamp);
+        return modelAndView;
     }
 }
