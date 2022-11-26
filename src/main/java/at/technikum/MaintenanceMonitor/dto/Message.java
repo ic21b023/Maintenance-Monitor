@@ -5,13 +5,9 @@ import java.time.Month;
 
 public class Message {
 
-    private String message ="";
-    private LocalDateTime lastUpdateTime=LocalDateTime.of(2022, Month.JANUARY, 1, 0, 0, 0);
-
-    public String getMessage() {
-        return message;
-    }
-    public void setMessage(String message) {
+    private String message;
+    private LocalDateTime lastUpdateTime;
+    public Message(String message){
         this.message = message;
     }
 
@@ -23,9 +19,21 @@ public class Message {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public static Message getEmpty(){
-        Message dto = new Message();
-        dto.setMessage("");
+        Message dto = new Message("Message was received");
+
         return dto;
+    }
+
+    public static Message getCopy(Message dto){
+        return new Message(dto.getMessage());
     }
 }
