@@ -38,6 +38,6 @@ public class MaintenanceController {
     @DeleteMapping("/uptime/reset")
     String resetMessage(){
         maintenanceService.resetMessage();
-        return "";
+        return "Delete OK";
     }
 }

@@ -15,6 +15,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MaintenanceIT {
@@ -50,5 +51,19 @@ public class MaintenanceIT {
         Duration duration = Duration.between(actualdateTime,expecteddateTime);
 
         assertTrue(expectedMessage.equals(actualMessage) && duration.getSeconds()==0);
+    }
+
+    @Test
+    public void testDelete() throws IOException, InterruptedException {
+
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/uptime/reset"))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals("Delete OK",response.body());
     }
 }
