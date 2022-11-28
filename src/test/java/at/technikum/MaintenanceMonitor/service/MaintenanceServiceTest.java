@@ -30,7 +30,6 @@ public class MaintenanceServiceTest {
     void setLastUpdateTime() {
         LocalDateTime localDateTime = LocalDateTime.now();
         maintenanceService.setLastUpdateTime(localDateTime);
-
         assertEquals(localDateTime, maintenanceService.getLastUpdateTime());
     }
 
@@ -38,7 +37,6 @@ public class MaintenanceServiceTest {
     void resetMessage() {
         maintenanceService.setMessage("Test");
         maintenanceService.resetMessage();
-
         assertEquals(maintenanceService.getMessage(),(""));
     }
 }

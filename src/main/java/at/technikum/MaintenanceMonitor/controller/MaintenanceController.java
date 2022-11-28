@@ -29,18 +29,15 @@ public class MaintenanceController {
         modelAndView.addObject("message", maintenanceService.getMessage());
         modelAndView.addObject("condition", maintenanceService.getMessage().isEmpty());
         modelAndView.setViewName("index");
-
         String timeStamp = maintenanceService.getLastUpdateTime() == null ? "" : maintenanceService.getLastUpdateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-
         modelAndView.addObject("time", timeStamp);
+        System.out.println(modelAndView.getView());
         return modelAndView;
     }
 
     @DeleteMapping("/uptime/reset")
     String resetMessage(){
-
         maintenanceService.resetMessage();
-
         return "";
     }
 }
