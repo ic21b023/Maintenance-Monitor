@@ -1,4 +1,4 @@
-package at.technikum.MaintenanceMonitor.integration;
+package at.technikum.MaintenanceMonitor.integrationTests;
 
 import at.technikum.MaintenanceMonitor.dto.Message;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,16 +17,16 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class integrationTest {
+public class MaintenanceIT {
 
     @Test
     public void testPost() throws IOException, InterruptedException {
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         String requestBody = objectMapper.writeValueAsString("Test");
-        Message messagee = new Message("Test",LocalDateTime.now());
 
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder()
@@ -37,6 +37,7 @@ public class integrationTest {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+        Message messagee = new Message("Test",LocalDateTime.now());
         JsonNode expectedJsonNode = objectMapper.readTree(objectMapper.writeValueAsString(messagee));
         String expectedMessage = expectedJsonNode.get("message").textValue();
         String expectedLastUpdateTime = expectedJsonNode.get("lastUpdateTime").textValue();
@@ -46,7 +47,7 @@ public class integrationTest {
 
         LocalDateTime actualdateTime = LocalDateTime.parse(actualLastUpdateTime);
         LocalDateTime expecteddateTime = LocalDateTime.parse(expectedLastUpdateTime);
-        Duration duration = Duration.between(expecteddateTime, actualdateTime);
+        Duration duration = Duration.between(actualdateTime,expecteddateTime);
 
         assertTrue(expectedMessage.equals(actualMessage) && duration.getSeconds()==0);
     }
