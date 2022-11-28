@@ -6,11 +6,11 @@
     <link th:href="@{/cssandjs/main.css}" rel="stylesheet" />
 </head>
 <body th:class="${condition ? 'bg_green' : 'bg_red'}" marginheight="">
-<div>
-<h1> Maintenance Monitor </h1>
-<h3 th:text="${message}"></h3>
-<h5 th:text="'Last Update: ' +${time}">  </h5>
+<div id="main">
+<h1 id="title"> Maintenance Monitor </h1>
+<h3 id="message" th:text="${message}"></h3>
+<h5 id="time" th:text="'Last Update: ' +${time}">  </h5>
 </div>
-<script>setInterval(location.reload(), 5000);</script>
+<script id="updateTimer">setInterval(location.reload(), 5000);</script>
 </body>
 </html>
