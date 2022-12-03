@@ -1,7 +1,9 @@
 package at.technikum.MaintenanceMonitor.controller;
 
-import at.technikum.MaintenanceMonitor.dto.Message;
 import at.technikum.MaintenanceMonitor.service.MaintenanceService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -10,34 +12,33 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 public class MaintenanceController {
-
     private final MaintenanceService maintenanceService;
 
     public MaintenanceController(MaintenanceService maintenanceService){
         this.maintenanceService = maintenanceService;
     }
 
-    @PostMapping("/uptime/setMessage")
-    Message setMessage(@RequestBody Message dto){
-        maintenanceService.setMessage(dto.getMessage());
+    @PutMapping(path="/uptime/setMessage")
+    ResponseEntity<Void> setMessage(@RequestBody String message){
+        maintenanceService.setMessage(message);
         maintenanceService.setLastUpdateTime(LocalDateTime.now());
-        return maintenanceService.getCopyOfCurrentlyStoredMessage();
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/uptime")
+    @GetMapping(path = "/uptime", produces = MediaType.TEXT_HTML_VALUE)
     ModelAndView getMessage(ModelAndView modelAndView){
         modelAndView.addObject("message", maintenanceService.getMessage());
         modelAndView.addObject("condition", maintenanceService.getMessage().isEmpty());
-        modelAndView.setViewName("index");
+        modelAndView.setViewName("index.html");
         String timeStamp = maintenanceService.getLastUpdateTime() == null ? "" : maintenanceService.getLastUpdateTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         modelAndView.addObject("time", timeStamp);
-        System.out.println(modelAndView.getView());
+        modelAndView.setStatus(HttpStatus.OK);
         return modelAndView;
     }
 
     @DeleteMapping("/uptime/reset")
-    String resetMessage(){
+    ResponseEntity<Void> resetMessage(){
         maintenanceService.resetMessage();
-        return "Delete OK";
+        return ResponseEntity.ok().build();
     }
 }
