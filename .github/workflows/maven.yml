@@ -28,38 +28,45 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # BUILD PROJECT
-      - name: Build Project
+      # COMPILE PROJECT
+      - name: Compile Project
         run: mvn -B compile --file pom.xml
 
       # UNIT-TESTS
       - name: Run UnitTests
         run: mvn -B test --file pom.xml
 
-      # MAVEN-INSTALL
-      - name: Maven install
-        run: mvn -B install --file pom.xml -DskipTests=true
-
       # INTEGRATION-TESTS
-      - name: Run InegrationTests
+      - name: Run IntegrationTests
         run: |
+          mvn -B install --file pom.xml -Dmaven.test.skip=true
           java -jar target/*.jar &
           sleep 5
           mvn -B failsafe:integration-test --file pom.xml
           kill -9 `lsof -i:8080 -t` 
 
       # TEST REPORTER
-      - name: Test Reporter
+      - name: Create Unit-Test Report
         uses: dorny/test-reporter@v1.6.0
         if: success() || failure()
         with:
           # Name of the check run
-          name: unit-tests
+          name: Unit-Tests
           path: target/surefire-reports/TEST-*.xml
           reporter: java-junit
 
+      # TEST REPORTER
+      - name: Create Integration-Test Report
+        uses: dorny/test-reporter@v1.6.0
+        if: success() || failure()
+        with:
+          # Name of the check run
+          name: Integration-Tests
+          path: target/failsafe-reports/TEST-*.xml
+          reporter: java-junit
+
       # UPLOAD - JACOCO REPORT
-      - name: JaCoCo Code Coverage Report
+      - name: Create Code Coverage Report
         id: jacoco_reporter
         uses: PavanMudigonda/jacoco-reporter@v4.6
         with:
@@ -72,16 +79,16 @@ jobs:
           fail_below_threshold: false
           publish_only_summary: false
 
-      # UPLOAD A ARIFACT (JACOCO REPORT)
-      - name: Upload Jacoco Report
+      # UPLOAD A ARTIFACT (JACOCO REPORT)
+      - name: Upload Code Coverage Report Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           # Artifact name
-          name: jacocoreport
+          name: coveragereport
           path: target/site
 
-      # UPLOAD A ARIFACT (DEPOYABLE)
-      - name: Upload a Build Artifact
+      # UPLOAD A ARTIFACT (DEPLOYABLE)
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
           # Artifact name
@@ -89,6 +96,7 @@ jobs:
           # A file, directory or wildcard pattern that describes what to upload
           path: target/*.jar
           # The desired behavior if no files are found using the provided path.
+
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph

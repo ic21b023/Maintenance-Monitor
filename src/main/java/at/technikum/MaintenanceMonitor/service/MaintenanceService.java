@@ -19,13 +19,6 @@ public class MaintenanceService {
         messageModel.setLastUpdateTime(time);
     }
 
-    public Message getCopyOfCurrentlyStoredMessage(){
-        Message msg = new Message(messageModel.getMessage());
-        msg.setLastUpdateTime(messageModel.getLastUpdateTime());
-
-        return msg;
-    }
-
     public String getMessage(){
         return messageModel.getMessage();
     }
